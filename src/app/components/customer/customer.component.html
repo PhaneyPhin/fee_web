@@ -1,0 +1,554 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading; else showPage "></mat-progress-bar>
+<ng-template class="animated fadeIn" #showPage>
+  <div *ngIf="action.id==0" class="animated fadeIn">
+    <div class="card">
+      <div class="card-header">
+        {{action.action_type[lang]}}
+
+      </div>
+      <div class="card-body">
+
+        <div class="row">
+          <div class="col-sm-3" style="padding:20px;">
+
+              <div class="input-group">
+                 <!--div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                  </div-->
+                <input type="text" id="input-normal" name="search" class="form-control"
+                  placeholder="{{language.search}}" [(ngModel)]="search_text" (input)="onSearchChange($event)" >
+
+              </div>
+          </div>
+          <div class="col-sm-9" style="padding:20px">
+            <button class="btn btn-success" style="float:right;" (click)="add()"><i
+              class="fas fa-plus"></i>&nbsp;{{language.add_customer}}</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="table-responsive">
+              <table class="table table-bordered table-responsive-sm table-hover  " [mfData]="customers"
+                #mf="mfDataTable" [mfRowsOnPage]="5">
+                <thead>
+                  <tr>
+                    <th>
+                      <mfDefaultSorter by="customer_id">{{language.customer_id}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="customer_name">{{language.customer_name}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="mobile">{{language.mobile}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                      <mfDefaultSorter by="email">{{language.email}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                      {{language.place}}
+                    </th>
+                    <th>
+
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of mf.data">
+                    <td>{{item.customer_id}}</td>
+                    <td>{{item.customer_name}}</td>
+                    <td>{{item.mobile}}</td>
+                    <td>{{item.email}}</td>
+                    <td>
+                      <button class="btn btn-primary btn-sm" (click)="view_place(item)"><i
+                          class="fas fa-info-circle"></i>&nbsp;{{language.show_place_detail}}</button>
+                    </td>
+                    <td>
+                      <button (click)="edit(item)" class="btn btn-sm btn-warning"><i
+                          class="far fa-edit"></i>&nbsp;{{language.edit}}</button>
+                      <button (click)="delete_customer(item)" class="btn btn-sm btn-danger">
+                        <i class="far fa-trash-alt"></i>
+                        {{language.delete}}
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="6">
+                      <app-paginator [rowsOnPageSet]="[5,10,25]" [lang]="lang"></app-paginator>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div *ngIf="action.id==1||action.id==2" class="animated fadeIn">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-lg-6">
+            {{action.action_type[lang]}}
+          </div>
+          <div class="col-lg-6">
+            <button class="btn btn-success" style="float:right" (click)="back()">
+              <i class="fas fa-long-arrow-alt-left"></i>&nbsp;
+              {{language.back_to_customer}}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-6">
+
+          </div>
+          <div class="col-sm-6">
+
+          </div>
+        </div>
+        <div class="form-horizontal">
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label class="col-form-label" for="input-normal">{{language.customer_id}} : </label>
+              <div class="input-group">
+                 <!--div class="input-group-prepend">
+                  <span class="input-group-text">#</span>
+                </div-->
+                <select ame="input-normal" class="form-control" disabled>
+                  <option selected>{{edit_customer.customer_id}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+
+              <label class="col-form-label" for="input-normal">{{language.customer_name}} : </label>
+              <div class="input-group">
+                 <!--div class="input-group-prepend">
+                  <span class="input-group-text"><i class="icon-user"></i></span>
+                </div-->
+                <input type="text" id="input-normal" name="customer_name" class="form-control"
+                  placeholder="{{language.alert_customer_name}}" [(ngModel)]="edit_customer.customer_name" [ngClass]="{'is-invalid':submitted&&edit_customer.customer_name==''}">
+              </div>
+              <div class="errors" *ngIf="submitted&&edit_customer.customer_name==''">
+                ** {{language.alert_customer_name}}
+              </div>
+            </div>
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <label class="col-form-label" for="input-normal">{{language.mobile}} : </label>
+              <div class="input-group">
+                 <!--div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-phone-volume"></i></span>
+                </div-->
+                <input type="text" id="input-normal" name="mobile" class="form-control"
+                  placeholder="{{language.alert_mobile}}" [(ngModel)]="edit_customer.mobile" [ngClass]="{'is-invalid':submitted&&edit_customer.mobile==''}">
+              </div>
+              <div class="errors" *ngIf="submitted&&edit_customer.mobile==''">
+                ** {{language.alert_mobile}}
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <label class="col-form-label" for="input-normal">{{language.email}} : </label>
+              <div class="input-group">
+                 <!--div class="input-group-prepend">
+                  <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                </div-->
+                <input type="text" id="input-normal" name="email" class="form-control"
+                  placeholder="{{language.alert_email}}" [(ngModel)]="edit_customer.email" [ngClass]="{'is-invalid':submitted&&(edit_customer.email==''||(edit_customer.email.indexOf('@')==-1)||(edit_customer.email.indexOf('.com')==-1))}">
+              </div>
+              <div class="errors" *ngIf="submitted&&edit_customer.email!=''&&((edit_customer.email.indexOf('@')==-1)||(edit_customer.email.indexOf('.com')==-1))">
+                ** {{language.email_error}}
+              </div>
+              <div class="errors" *ngIf="submitted&&(edit_customer.email=='')">
+                ** {{language.alert_email}}
+              </div>
+            </div>
+
+          </div>
+          <div class=" form-group row">
+
+            <div class="col-sm-12">
+              <button class="btn btn-primary " style="float:right;margin-right:20px" (click)="save_customer()"><i
+                  class="far fa-save"></i>&nbsp;{{language.save_data}}</button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="action.id==3" class="animated fadeIn">
+    <div class="row" style="padding:10px">
+      <div class="col-sm-6">
+        <table style="width:100%">
+          <tr>
+            <td>{{language.customer_id +" : "+view_place_customer.customer_id}} </td>
+
+            <td>{{language.customer_name+" : "+view_place_customer.customer_name}} </td>
+
+          </tr>
+        </table>
+      </div>
+      <div class="col-sm-6">
+        <table style="width:100%">
+          <tr>
+            <td>{{language.mobile}} : {{view_place_customer.mobile}}</td>
+
+            <td>{{language.email}} : {{view_place_customer.email}}</td>
+
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        {{action.action_type[lang]}}
+        <button class="btn btn-success" style="float:right;" (click)="back()">
+          <i class="fas fa-long-arrow-alt-left"></i>&nbsp;
+          {{language.back_to_customer}}
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-3" style="padding:20px;">
+              <div class="input-group">
+                   <!--div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    </div-->
+                  <input type="text" id="input-normal" name="search_place" class="form-control"
+                    placeholder="{{language.search}}" [(ngModel)]="search_place" (input)="onSearchPlace($event)" >
+
+                </div>
+          </div>
+          <div class="col-sm-9" style="padding:20px;">
+              <button class="btn btn-success" style="float:right;" (click)="add_place()"><i
+                class="fas fa-plus"></i>&nbsp;{{language.add_customer_place}}</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-responsive-sm table-hover  table-place" [mfData]="places" #mf="mfDataTable" [mfRowsOnPage]="5">
+                <thead>
+                <tr>
+
+                    <th>
+                        <mfDefaultSorter by="customer_id">{{language.customer_id}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="place_id">{{language.place_id}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="place_description">{{language.place_description}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="place_number">{{language.place_number}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="tambol">{{language.tambol}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="amphur">{{language.amphur}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="province">{{language.province}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="postcode">{{language.postcode}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="remark">{{language.remark}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="place_type_description">{{language.place_type_description}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="lat">{{language.lat}}</mfDefaultSorter>
+                    </th>
+                    <th>
+                        <mfDefaultSorter by="lon">{{language.lon}}</mfDefaultSorter>
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let place of mf.data">
+                        <td class="text-center">{{place.customer_id}}</td>
+                        <td>{{place.place_id}}</td>
+                        <td>{{place.place_description}}</td>
+                        <td>{{place.place_number}}</td>
+                        <td>{{place.tambol}}</td>
+                        <td>{{place.amphur}}</td>
+                        <td>{{place.province}}</td>
+                        <td>{{place.postcode}}</td>
+                        <td>{{place.remark}}</td>
+                        <td>{{place.place_type_description}}</td>
+                        <td>{{place.lat}}</td>
+                        <td>{{place.lon}}</td>
+                        <td>
+                          <button (click)="edit_place(place)" class="btn btn-sm btn-warning"><i
+                              class="far fa-edit"></i>&nbsp;{{language.edit}}</button>
+                          <button (click)="delete_place(place)" class="btn btn-sm btn-danger">
+                            <i class="far fa-trash-alt"></i>
+                            {{language.delete}}
+                          </button>
+                        </td>
+                      </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="13">
+                        <app-paginator [rowsOnPageSet]="[5,10,25]" [lang]="lang"></app-paginator>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="action.id==4||action.id==5" class="animated fadeIn">
+    <div class="row" style="padding:10px">
+      <div class="col-sm-6">
+        <table style="width:100%">
+          <tr>
+            <td>{{language.customer_id}} : {{view_place_customer.customer_id}} </td>
+
+            <td>{{language.customer_name}} : {{view_place_customer.customer_name}} </td>
+
+          </tr>
+        </table>
+      </div>
+      <div class="col-sm-6">
+        <table style="width:100%">
+          <tr>
+            <td>{{language.mobile}} : {{view_place_customer.mobile}}</td>
+
+            <td>{{language.email}} : {{view_place_customer.email}}</td>
+
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        {{action.action_type[lang]}}
+        <button class="btn btn-success" style="float:right;margin-left:20px;" (click)="back_place()">
+          <i class="fas fa-long-arrow-alt-left"></i>&nbsp;
+          {{language.back_to_customer_place}}
+        </button>
+        <button class="btn btn-primary" style="float:right" (click)="back()">
+          <i class="fas fa-long-arrow-alt-left"></i>&nbsp;
+          {{language.back_to_customer}}
+        </button>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-6">
+                <b>{{language.choose_position}} </b>
+                <div class="form-group row">
+
+                  <div class="col-sm-6">
+                    <label class="col-form-label" for="input-normal">{{language.lat}} : </label>
+                    <div class="input-group">
+                       <!--div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                      </div-->
+                      <input type="text" id="input-normal" name="lat" class="form-control" placeholder=""
+                        [(ngModel)]="place_customer.lat" [ngClass]="{'is-invalid':submitted&&place_customer.lat==''}" disabled>
+                    </div>
+                    <div class="errors" *ngIf="submitted&&place_customer.lat==''">
+                      ** {{language.alert_position}}
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                      <label class="col-form-label" for="input-normal">{{language.lon}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                        </div-->
+                        <input type="text" id="input-normal" name="lon" class="form-control" placeholder=""
+                          [(ngModel)]="place_customer.lon" [ngClass]="{'is-invalid':submitted&&place_customer.lat==''}" disabled>
+                      </div>
+                      <div class="errors" *ngIf="submitted&&place_customer.lat==''">
+                        ** {{language.alert_position}}
+                      </div>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+
+
+                  <div class="col-sm-12">
+                    <label class="col-form-label" for="input-normal">{{language.place_id}} : </label>
+                    <div class="input-group">
+                       <!--div class="input-group-prepend">
+                        <span class="input-group-text">ID</span>
+                      </div-->
+                      <select ame="input-normal" class="form-control" disabled>
+                        <option selected>{{place_customer.place_id}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="width:100%;height:350px;background:gray" id="map"></div>
+              </div>
+              <div class="col-sm-6">
+                <br>
+                <div class="form-horizontal">
+
+                  <div class="form-group row">
+
+                    <div class="col-sm-12">
+                      <label class=" col-form-label" for="input-normal">{{language.place_description}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-newspaper"></i></span>
+                        </div-->
+                        <input type="text" id="input-normal" name="place_description" class="form-control"
+                          placeholder="{{language.alert_place_description}}" [(ngModel)]="place_customer.place_description" >
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+
+                    <div class="col-sm-6">
+                      <label class=" col-form-label" for="input-normal">{{language.place_number}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text">#</span>
+                        </div-->
+                        <input type="text" id="input-normal" name="place_number" class="form-control"
+                          placeholder="{{language.alert_place_number}}" [(ngModel)]="place_customer.place_number" [ngClass]="{'is-invalid':submitted&&place_customer.place_number==''}">
+                      </div>
+                      <div class="errors" *ngIf="submitted&&place_customer.place_number==''">
+                        ** {{language.alert_place_number}}
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class=" col-form-label" for="input-normal">{{language.tambol}} : </label>
+                        <div class="input-group">
+                           <!--div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                          </div-->
+                          <input type="text" id="input-normal" name="tambol" class="form-control"
+                            placeholder="{{language.alert_tambol}}" [(ngModel)]="place_customer.tambol" [ngClass]="{'is-invalid':submitted&&place_customer.tambol==''}">
+                        </div>
+                        <div class="errors" *ngIf="submitted&&place_customer.tambol==''">
+                          ** {{language.alert_tambol}}
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                    <div class="col-sm-6">
+                      <label class=" col-form-label" for="input-normal">{{language.amphur}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                        </div-->
+                        <input type="text" id="input-normal" name="amphur" class="form-control"
+                          placeholder="{{language.alert_amphur}}" [(ngModel)]="place_customer.amphur" [ngClass]="{'is-invalid':submitted&&place_customer.amphur==''}">
+                      </div>
+                      <div class="errors" *ngIf="submitted&&place_customer.amphur==''">
+                        ** {{language.alert_amphur}}
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class=" col-form-label" for="input-normal">{{language.province}} : </label>
+                        <div class="input-group">
+                           <!--div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-map-marked-alt"></i></span>
+                          </div-->
+                          <input type="text" id="input-normal" name="province" class="form-control"
+                            placeholder="{{language.alert_province}}" [(ngModel)]="place_customer.province" [ngClass]="{'is-invalid':submitted&&place_customer.province==''}">
+                        </div>
+                        <div class="errors" *ngIf="submitted&&place_customer.province==''">** {{language.alert_province}}</div>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+
+                    <div class="col-sm-12">
+                      <label class=" col-form-label" for="input-normal">{{language.remark}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text"> <i class="far fa-sticky-note"></i></span>
+                        </div-->
+                        <input type="text" id="input-normal" name="remark" class="form-control"
+                          placeholder="{{language.alert_remark}}" [(ngModel)]="place_customer.remark">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+
+                    <div class="col-sm-6">
+                      <label class=" col-form-label" for="input-normal">{{language.place_type_description}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-home"></i></span>
+                        </div-->
+                        <select id="input-normal" name="place_type_name" class="form-control"
+                          [(ngModel)]="place_customer.place_type_id" [ngClass]="{'is-invalid':submitted&&place_customer.place_type_id==''}">
+                          <option value="" selected></option>
+                          <option *ngFor="let place_type of place_types" [value]="place_type.place_type_id">
+                            {{place_type.place_type_description}}</option>
+                        </select>
+
+                      </div>
+                      <div class="errors" *ngIf="submitted&&place_customer.place_type_id==''">
+                        ** {{language.alert_place_type}}
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class=" col-form-label" for="input-normal">{{language.postcode}} : </label>
+                        <div class="input-group">
+                           <!--div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-mail-bulk"></i></span>
+                          </div-->
+                          <input type="text" id="input-normal" name="postcode" class="form-control"
+                            placeholder="{{language.alert_postcode}}" [(ngModel)]="place_customer.postcode" [ngClass]="{'is-invalid':submitted&&place_customer.postcode==''}">
+                        </div>
+                        <div class="errors" *ngIf="submitted&&place_customer.postcode==''">
+                          ** {{language.alert_postcode}}
+                        </div>
+                      </div>
+                  </div>
+
+
+                  <div class="form-group row">
+                    <div class="col-sm-12">
+                        <!-- <button class="btn btn-danger save-data" style="float:right;margin-right:10px;"
+                        (click)="clear()"><i class="fas fa-cut"></i>&nbsp;{{language.clear}}</button> -->
+                      <button class="btn btn-primary save-data" style="float:right;margin-right:10px;"
+                        (click)="save_place()"><i class="far fa-save"></i>&nbsp;{{language.save_data}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</ng-template>

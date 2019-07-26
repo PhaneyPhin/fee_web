@@ -1,0 +1,17 @@
+$blue:#09a0d8;
+.card{
+  border-top: 0px solid lightblue;
+}
+.card-body{
+  font-size:24pt;
+  color:$blue;
+  p{
+    font-size:11pt;
+  }
+  // border-top:0px solid white !important;
+}
+.card-header{
+  background:$blue;
+
+  color:white;
+}

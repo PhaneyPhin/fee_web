@@ -1,0 +1,40 @@
+export const fee_types_lange={
+    TH:{
+        back_to_fee_type:"กลับไปหน้าเสดงข้อมูลชนิดค่า",
+        fee_type_id:"รหัสชนิดค่าธรรมเนียม",
+        fee_type_description:"รายละเอียดชนิดค่าธรรมเนียม",
+        alert_fee_type_description:"กรุณากรอกรายละเอียดชนิดค่าธรรมเนียม",
+        save_data:"บันทึกข้อมูล",
+        fee_type:"จัดการข้อมูลชนิดค่าธรรมเนียม",
+        add_fee_type:"เพิ่มข้อมูลชนิดค่าธรรมเนียม",
+        edit:"แก้ไข",
+        delete:"ลบ",
+        no_internet:"เกิดข้อผิดพลาดในการดึงข้อมูล กรุณาตรวจสอบการเชื่อมต่ออินเตอร์เน็ตของคุณ!",
+        saved:"ข้อมูลถูกบันทึกเรียบร้อยแล้ว!",
+        confirm_delete:"คุณต้องการลบข้อมูลชนิดค่าธรรมเนียมนี้ใช่หรือไหม?",
+        warning_delete:"ข้อมูลถูกลบแล้วไม่สามารถย้อนกลับได้",
+        want_delete:"ฉันต้องการลบ",
+        close_page:"ปิดหน้านี้",
+        deleted:"ข้อมูลถูกลบเรียบร้อยแล้ว!",
+        search:"ค้นหา"
+    },
+    EN:{
+        back_to_fee_type:"back to show fee type data",
+        fee_type_id:"fee type id",
+        fee_type_description:"fee type description",
+        alert_fee_type_description:"please input the fee type description",
+        save_data:"save data",
+        fee_type:"fee tyle data",
+        add_fee_type:"add fee type",
+        edit:"edit",
+        delete:"delete",
+        no_internet:"Error while change your data please check your internet connection!",
+        saved:"data was saved!",
+        confirm_delete:"Are you sure to delete this fee type data?",
+        warning_delete:"deleted data can't recovery!",
+        want_delete:"delete this data",
+        close_page:"close",
+        deleted:"data was deleted!",
+        search:"search"
+    }
+}

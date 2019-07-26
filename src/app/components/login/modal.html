@@ -1,0 +1,31 @@
+<div class="modal-header">
+    <h4 class="modal-title pull-left">{{lang=='EN'?'Choose Municipality':'เลือกเทศบาล'}}</h4>
+    <div class="pull-right">
+      <button type="button" class="btn btn-basic" aria-label="Close" (click)="changelang('EN')">
+        EN
+      </button>
+      |
+      <button type="button" class="btn btn-basic" aria-label="Close" (click)="changelang('TH')">
+        TH
+      </button>
+      </div>
+
+  </div>
+  <div class="modal-body">
+    <!-- <ul *ngIf="list.length">
+      <li *ngFor="let item of list">{{item}}</li>
+    </ul> -->
+    <div class="form-group">
+      <!-- <label>select the municipality</label> -->
+      <select class="form-control" [(ngModel)]="municipality" [ngClass]="{'is-invalid':submitted&&municipality==''}">
+        <option *ngFor="let item of data" [value]="item.municipality_id">{{lang=='EN'?item.en_name:item.th_name}}</option>
+      </select>
+      <div class="errors" *ngIf="submitted&&municipality==''">
+
+        {{lang=='EN'?' ** please choose the municipality':'กรุณาเลือเทศบาล'}}
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="done()"> {{lang=='EN'?'Done':'เสร็จสิน'}}</button>
+  </div>

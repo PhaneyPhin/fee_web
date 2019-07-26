@@ -1,0 +1,153 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading; else showPage "></mat-progress-bar>
+<ng-template #showPage>
+  <div class="animated fadeIn" *ngIf="action==0">
+    <div class="card">
+      <div class="card-header">
+        {{language.table_title}}
+      </div>
+      <div class="card-body">
+          <div class="row">
+              <div class="col-sm-3" style="padding:20px">
+                  <div class="input-group">
+                       <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div-->
+                      <input type="text" id="input-normal" name="search_user" class="form-control"
+                        placeholder="{{language.search}}" (input)="onSearchUser($event)">
+
+                    </div>
+              </div>
+
+            </div>
+          <div class="table-responsive">
+              <table class="table table-bordered col-sm-12 table-responsive-sm table-hover  fee-table"
+                [mfData]="users" #mf="mfDataTable" [mfRowsOnPage]="5">
+                <thead>
+                    <tr>
+                        <th>
+                          <mfDefaultSorter by="user_id">{{language.user_id}}</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="user_name">{{language.name}}</mfDefaultSorter>
+                        </th>
+                        <th>
+                          <mfDefaultSorter by="user_surname">{{language.surename}}</mfDefaultSorter>
+                        </th>
+                        <th>
+                            <mfDefaultSorter by="lastlogin">{{language.login}}</mfDefaultSorter>
+                        </th>
+
+                        <th>
+                            {{language.position}}
+                        </th>
+                        <th class="text-center">{{language.status}}</th>
+                        <th class="text-center">
+                          {{language.view_map}}
+                        </th>
+                      </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of mf.data">
+                      <td>{{item.user_id}}</td>
+                      <td>{{item.user_name || ""}}</td>
+                      <td>{{item.user_surname || ""}}</td>
+                      <td>{{item.lastlogin}}</td>
+                      <td>({{item.lat}},{{item.lon}})</td>
+                      <td class="text-center" [ngClass]="{'is-active':item.active}" style="color:gray">{{item.active?"active":"offline"}}</td>
+                      <td class="text-center" style="color:#2196F3">
+                        <i class="fas fa-compress" style="cursor: pointer;" (click)="view_map(item)"></i>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                      <tr>
+                        <td colspan="7">
+                          <app-paginator [rowsOnPageSet]="[5,10,25]" [lang]="lang"></app-paginator>
+                        </td>
+                      </tr>
+                    </tfoot>
+              </table>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="action==0">
+    <div class="card">
+      <div class="card-header">
+        {{language.title}}
+      </div>
+      <div class="card-body">
+        <div style="width:100%;height:70vh;background:gray;" id="map">
+          <div   *ngFor="let user of users" >
+               <ng-template #popTemplate>
+                  <table class="table table-sm table-borderless">
+                    <tr>
+                      <td>{{language.name}}:</td><td>{{user.user_name}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{language.surename}}:</td><td>{{user.user_surname || "---------"}}</td>
+                    </tr>
+                    <tr>
+                      <td>{{language.login}}:</td><td>{{user.lastlogin}}</td>
+                    </tr>
+
+                    <tr>
+                      <td>{{language.position}}:</td><td>({{user.lat+","+user.lon}})</td>
+                    </tr>
+                  </table>
+                </ng-template>
+                <div data-html="true" id="{{user.user_id}}" class="marker marker-offline"  popoverTitle="# {{user.user_id}}"
+                [popover]="popTemplate" triggers="mouseenter:mouseleave" [outsideClick]="true" *ngIf="!user.active"></div>
+                <div data-html="true" id="{{user.user_id}}" class="marker marker-active"  popoverTitle="# {{user.user_id}}"
+                [popover]="popTemplate" triggers="mouseenter:mouseleave" [outsideClick]="true" *ngIf="user.active"></div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="animated fadeIn" *ngIf="action==1">
+    <div class="card">
+      <div class="card-header">
+          {{language.title}} # {{view_user.user_id}}
+          <button class="btn btn-success" style="float:right" (click)="back()">
+              <i class="fas fa-long-arrow-alt-left"></i>&nbsp;
+              {{language.back_to_user_position}}
+            </button>
+      </div>
+      <div class="card-body">
+          <div style="width:100%;height:70vh;background:gray;" id="map">
+              <div   *ngFor="let user of users" >
+                   <ng-template #popTemplate>
+                      <table class="table table-sm table-borderless">
+                        <tr>
+                          <td>{{language.name}}:</td><td>{{user.user_name}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{language.surename}}:</td><td>{{user.user_surname || "---------"}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{language.login}}:</td><td>{{user.lastlogin}}</td>
+                        </tr>
+
+                        <tr>
+                          <td>{{language.position}}:</td><td>({{user.lat+","+user.lon}})</td>
+                        </tr>
+                      </table>
+                    </ng-template>
+                    <div data-html="true" id="{{user.user_id}}" class="marker marker-offline"  popoverTitle="# {{user.user_id}}"
+                    [popover]="popTemplate" triggers="mouseenter:mouseleave" [outsideClick]="true" *ngIf="!user.active&&user.user_id!=view_user.user_id"></div>
+                    <div data-html="true" id="{{user.user_id}}" class="marker marker-offline-view"  popoverTitle="# {{user.user_id}}"
+                    [popover]="popTemplate" triggers="mouseenter:mouseleave" [outsideClick]="true" *ngIf="!user.active&&user.user_id==view_user.user_id"></div>
+                    <div data-html="true" id="{{user.user_id}}" class="marker marker-active"  popoverTitle="# {{user.user_id}}"
+                    [popover]="popTemplate" triggers="mouseenter:mouseleave" [outsideClick]="true" *ngIf="user.active&&user.user_id!=view_user.user_id"></div>
+                    <div data-html="true" id="{{user.user_id}}" class="marker marker-active-view"  popoverTitle="# {{user.user_id}}"
+                    [popover]="popTemplate" triggers="mouseenter:mouseleave" [outsideClick]="true" *ngIf="user.active&&user.user_id==view_user.user_id"></div>
+
+
+              </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,119 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading; else showPage "></mat-progress-bar>
+<ng-template #showPage>
+    <div class="animated fadeIn" *ngIf="action.id!=0">
+        <div class="card">
+            <div class="card-header">
+              {{action.action_type[lang]}}
+              <button class="btn btn-success" style="float:right" (click)="back()">
+                  <i class="fas fa-long-arrow-alt-left"></i>&nbsp;
+                  {{language.back_to_place_type}}
+              </button>
+            </div>
+            <div class="card-body">
+
+              <div class="col-sm-12 form-horizontal">
+                <div class="row">
+
+                  <div class="col-sm-6 form-group ">
+                    <label class="col-form-label" for="input-normal">{{language.place_type_id}} : </label>
+                    <div class="input-group">
+                       <!--div class="input-group-prepend">
+                        <span class="input-group-text">#</span>
+                      </div-->
+                      <select name="place_type_id" class="form-control" disabled>
+                        <option selected>{{place_type.place_type_id}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6 form-group ">
+                    <label class="col-form-label" for="input-normal">{{language.place_type_description}} : </label>
+                    <div class="input-group">
+                       <!--div class="input-group-prepend">
+                        <span class="input-group-text" ><i class="fas fa-hryvnia"></i></span>
+                      </div-->
+                      <input type="text" id="input-normal" name="place_type_description" class="form-control"
+                        placeholder="{{language.alert_place_type_description}}" [(ngModel)]="place_type.place_type_description" [ngClass]="{ 'is-invalid': submitted && place_type.place_type_description==''}">
+                    </div>
+                    <div  class="errors" *ngIf="submitted && place_type.place_type_description==''">
+                        ** {{language.alert_place_type_description}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                  <button class="btn btn-primary " style="float:right;margin-right:20px" (click)="save()"><i
+                    class="far fa-save"></i>&nbsp;{{language.save_data}}</button>
+              </div>
+
+            </div>
+          </div>
+    </div>
+    <div class="animated fadeIn" *ngIf="action.id==0">
+      <div class="card">
+        <div class="card-header">
+          {{action.action_type[lang]}}
+
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3" style="padding:20px">
+                    <div class="input-group">
+                         <!--div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                          </div-->
+                        <input type="text" id="input-normal" name="search_place_type" class="form-control"
+                          placeholder="{{language.search}}" [(ngModel)]="search_place_type" (input)="onSearchPlace_type($event)">
+
+                      </div>
+                </div>
+                <div class="col-sm-9" style="padding:20px;">
+                    <button class="btn btn-success" style="float:right;" (click)="add()"><i
+                      class="fas fa-plus"></i>&nbsp;{{language.add_place_type}}</button>
+                </div>
+              </div>
+          <div class="table-responsive">
+            <table class="table table-bordered col-sm-12 table-responsive-sm table-hover  place-type-table"
+              [mfData]="place_types" #mf="mfDataTable" [mfRowsOnPage]="5">
+              <thead>
+                <tr>
+                  <th style="width: 20%">
+                    <mfDefaultSorter by="place_type_id">{{language.place_type_id}}</mfDefaultSorter>
+                  </th>
+                  <th style="width: 50%">
+                    <mfDefaultSorter by="place_type_description">{{language.place_type_description}}</mfDefaultSorter>
+                  </th>
+                  <th style="width: 30%">
+                      <!-- <mfDefaultSorter by="place_type_id"></mfDefaultSorter> -->
+                  </th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of mf.data">
+                  <td>{{item.place_type_id}}</td>
+                  <td>{{item.place_type_description}}</td>
+
+                  <td>
+                    <button (click)="edit(item)" class="btn btn-sm btn-warning"><i
+                        class="far fa-edit"></i>&nbsp;{{language.edit}}</button>
+                    <button (click)="delete(item)" class="btn btn-sm btn-danger">
+                      <i class="far fa-trash-alt"></i>
+                      {{language.delete}}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="4">
+                    <app-paginator [rowsOnPageSet]="[5,10,25]" [lang]="lang"></app-paginator>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+</ng-template>

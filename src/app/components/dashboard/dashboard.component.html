@@ -1,0 +1,21 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading; else showPage "></mat-progress-bar>
+<ng-template #showPage>
+  <div class="animated fadeIn">
+    <div class="row">
+        <div class="col-sm-3" *ngFor="let card of cards[lang]">
+            <div class="card">
+              <div class="card-header text-center">
+                {{card.name}}
+              </div>
+              <div class="card-body text-center">
+                  {{card.number}} <i class="{{card.icon}}"></i>
+                  <p class="text-center">{{card.text+" " +card.quantity}} {{card.unit}}</p>
+              </div>
+              <div class="card-footer text-center">
+                <button class="btn btn-outline-primary" routerLink="{{card.url}}"><i class="fas fa-arrow-circle-right"></i>&nbsp;&nbsp;{{lang=='EN'?'show all details':'เสดงรายการทั้งหมด'}}</button>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</ng-template>

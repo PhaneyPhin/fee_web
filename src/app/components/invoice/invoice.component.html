@@ -1,0 +1,240 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading; else showPage "></mat-progress-bar>
+<ng-template #showPage>
+  <div class="animated fadeIn" *ngIf="action.id==0">
+    <div class="card">
+      <div class="card-header">
+        {{action.action_type[lang]}}
+
+      </div>
+      <div class="card-body">
+          <div class="row">
+              <div class="col-sm-3" style="padding:20px">
+                  <div class="input-group">
+                       <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        </div-->
+                      <input type="text" id="input-normal" name="search_bill" class="form-control"
+                        placeholder="{{language.search}}" [(ngModel)]="search_bill" (input)="onSearchFee_type($event)">
+
+                    </div>
+              </div>
+              <div class="col-sm-9" style="padding:20px;">
+
+              </div>
+            </div>
+        <div class="table-responsive">
+          <table class="table table-bordered col-sm-12 table-responsive-sm table-hover  fee-type-table"
+            [mfData]="paybills" #mf="mfDataTable" [mfRowsOnPage]="5">
+            <thead>
+              <tr>
+                  <th >
+                      <mfDefaultSorter by="bill_id">{{language.invoice_id}}</mfDefaultSorter>
+                    </th>
+                <th >
+                  <mfDefaultSorter by="bill_id">{{language.bill_id}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="fee_id">{{language.fee_id}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="fee_description">{{language.fee_description}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="customer_id">{{language.customer_id}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="customer_name">{{language.customer_name}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="user_id">{{language.user_id}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="create_datetime">{{language.create_datetime}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="due_date">{{language.due_date}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="fee_price">{{language.fee_price}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="vat">{{language.vat}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="vat_rate">{{language.vat_rate}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="vat_rate">{{language.payment_type}}</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="fee_id">{{language.total_price}}</mfDefaultSorter>
+                </th>
+                <th style="width: 30%">
+                    <!-- <mfDefaultSorter by="fee_type_id"></mfDefaultSorter> -->
+                </th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of mf.data">
+                  <td >
+                      {{item.invoice_id}}
+                    </td>
+                <td >
+                  {{item.bill_id}}
+                </td>
+                <td>
+                  {{item.fee_id}}
+                </td>
+                <td>
+                {{item.fee_description}}
+                </td>
+                <td>
+                  {{item.customer_id}}
+                </td>
+                <td>
+                  {{item.customer_name}}
+                </td>
+                <td>
+                  {{item.user_id}}
+                </td>
+                <td>
+                  {{item.createDate}}
+                </td>
+                <td>
+                  {{item.pay_datetime}}
+                </td>
+                <td>
+                    <span>&#3647;</span>{{item.fee_price}}
+                </td>
+                <td>
+                  {{item.vat}}
+                </td>
+                <td>
+                  {{item.vat_rate}}
+                </td>
+                <td>
+                  {{item.payment_description}}
+                </td>
+                <td>
+                  <span>&#3647;</span>{{item.total_price}}
+                </td>
+                <td>
+                  <button (click)="update(item)" class="btn btn-sm btn-warning">
+                      <i class="fas fa-check"></i>&nbsp;{{language.detail}}</button>
+
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="15">
+                  <app-paginator [rowsOnPageSet]="[5,10,25]" [lang]="lang"></app-paginator>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="animated fadeIn" *ngIf="action.id==1">
+      <div class="row">
+          <div class="col-sm-8">
+              <div class="card card-sm">
+                  <div class="card-header">
+                    {{language.invoice_id}} # {{paybill.invoice_id}}
+                  </div>
+                  <div class="card-body">
+                      <table class="table table-borderless">
+                        <tr>
+                          <td>{{language.bill_id}}</td><td>{{paybill.bill_id}}</td><td>{{language.payment_type}}</td><td>{{paybill.payment_description}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{language.create_datetime}}</td><td>{{paybill.createDate}}</td> <td>{{language.due_date}}</td><td>{{paybill.pay_datetime}}</td>
+                        </tr>
+                        <tr>
+                            <td>{{language.user_id}}</td><td>{{paybill.user_id}}</td>
+                        </tr>
+                          <!-- <tr>
+                            <td>{{language.username}}</td><td>{{paybill.user_id}}</td>
+                          </tr> -->
+                      </table>
+
+                  </div>
+
+                </div>
+          </div>
+          <div class="col-sm-4">
+              <div class="card card-sm">
+                  <div class="card-header">
+                    {{language.customer_id}} # {{paybill.customer_id}}
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-borderless">
+                      <!-- <tr>
+                        <td>
+                          {{language.customer_id}}
+                        </td>
+                        <td>
+                          {{paybill.customer_id}}
+                        </td>
+                      </tr> -->
+                      <tr>
+                        <td>{{language.customer_name}}</td><td>{{paybill.customer_name}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{language.mobile}}</td><td>{{paybill.mobile}}</td>
+                      </tr>
+                      <tr>
+                        <td>{{language.email}}</td><td>{{paybill.email}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card">
+            <div class="card-header">
+              {{language.fee_data}}
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th>{{language.fee_id}}</th>
+                      <th>{{language.fee_description}}</th>
+                      <th>{{language.fee_type_description}}</th>
+                      <th>{{language.total_price}}</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>{{paybill.fee_id}}</td>
+                          <td>{{paybill.fee_description}}</td>
+                          <td>{{paybill.fee_type_description}}</td>
+                          <td><span>&#3647;</span>{{paybill.total_price}}</td>
+
+                      </tr>
+                      <tr>
+                        <td colspan="2" ></td><td>{{language.vat}} ({{paybill.vat}})</td><td><span>&#3647;</span>{{vat_price}}</td>
+                      </tr>
+                  </tbody>
+                </table>
+
+              </div>
+              <button class="btn btn-danger save-data" style="float:right;margin-right:10px;"
+              (click)="back()"><i class="fas fa-cut"></i>&nbsp;{{language.close}}</button>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+</ng-template>

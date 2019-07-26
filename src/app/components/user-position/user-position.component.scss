@@ -1,0 +1,24 @@
+.marker {
+    width:50px;
+    height:50px;
+    opacity: 1;
+    margin-left:25px;
+    margin-top:25px;
+    background-size: 50px 50px;
+    background-repeat: no-repeat;
+  }
+  .marker-active{
+    background-image: url('assets/img/marker-active.png');
+  }
+  .marker-offline{
+    background-image: url('assets/img/marker-offline.png');
+  }
+  .marker-active-view{
+    background-image: url('assets/img/active.gif');
+  }
+  .marker-offline-view{
+    background-image: url('assets/img/offline.gif');
+  }
+  .is-active{
+    color:#33e933 !important;
+  }

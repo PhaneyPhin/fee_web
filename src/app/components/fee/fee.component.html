@@ -1,0 +1,179 @@
+<mat-progress-bar mode="indeterminate" *ngIf="isLoading; else showPage "></mat-progress-bar>
+<ng-template #showPage>
+  <div class="animated fadeIn">
+    <div class="animated fadeIn" *ngIf="action.id==0">
+        <div class="card" >
+            <div class="card-header">
+              {{language.fee_data}}
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3" style="padding:20px">
+                        <div class="input-group">
+                             <!--div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                              </div-->
+                            <input type="text" id="input-normal" class="form-control" name="search_fee"
+                              placeholder="{{language.search}}"  (input)="onSearchFee($event)">
+
+                          </div>
+                    </div>
+                    <div class="col-sm-9" style="padding:20px;">
+                        <button class="btn btn-success" style="float:right;" (click)="add()"><i
+                          class="fas fa-plus"></i>&nbsp;{{language.add_fee}}</button>
+                    </div>
+                  </div>
+              <div class="table-responsive">
+                <table class="table table-bordered col-sm-12 table-responsive-sm table-hover  fee-table"
+                  [mfData]="fees" #mf="mfDataTable" [mfRowsOnPage]="5">
+                  <thead>
+                    <tr>
+                      <th>
+                        <mfDefaultSorter by="fee_id">{{language.fee_id}}</mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="fee_description">{{language.fee_description}}</mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="fee_date">{{language.fee_date}}</mfDefaultSorter>
+                      </th>
+                      <th>
+                          <mfDefaultSorter by="fee_type_description">{{language.fee_type}}</mfDefaultSorter>
+                      </th>
+                      <th>
+                        <mfDefaultSorter by="fee_price">{{language.fee_price}}</mfDefaultSorter>
+                      </th>
+                      <th>
+
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of mf.data">
+                      <td>{{item.fee_id}}</td>
+                      <td>{{item.fee_description}}</td>
+                      <td>{{item.show_date}}</td>
+                      <td>{{item.fee_type_description}}</td>
+                      <td>{{item.fee_price}}</td>
+                      <td>
+                        <button (click)="edit(item)" class="btn btn-sm btn-warning"><i
+                            class="far fa-edit"></i>&nbsp;{{language.edit}}</button>
+                        <button (click)="delete(item)" class="btn btn-sm btn-danger">
+                          <i class="far fa-trash-alt"></i>
+                          {{language.delete}}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="6">
+                        <app-paginator [rowsOnPageSet]="[5,10,25]" [lang]="lang"></app-paginator>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+
+
+              </div>
+
+
+            </div>
+          </div>
+    </div>
+    <div class="animated fadeIn" *ngIf="action.id!=0">
+        <div class="card" >
+            <div class="card-header">
+              {{action.action_type[language]}}
+              <button class="btn btn-success" style="float:right" (click)="back()">
+                <i class="fas fa-long-arrow-alt-left"></i>&nbsp;
+                {{language.back_to_fee_data}}
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="form-horizontal">
+                <div class="form-group row">
+
+                  <div class="col-sm-4">
+                    <label class=" col-form-label" for="input-normal">{{language.fee_id}} : </label>
+                    <div class="input-group">
+                       <!--div class="input-group-prepend">
+                        <span class="input-group-text">#</span>
+                      </div-->
+                      <select ame="input-normal" class="form-control" disabled>
+                        <option selected>{{fee.fee_id}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                    <label class=" col-form-label" for="input-normal">{{language.fee_description}} : </label>
+                    <div class="input-group">
+                       <!--div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-funnel-dollar"></i></span>
+                      </div-->
+                      <input type="text" id="input-normal" name="fee_description" class="form-control"
+                        placeholder="{{language.alert_fee_description}}" [(ngModel)]="fee.fee_description" [ngClass]="{ 'is-invalid': submitted && fee.fee_description==''}">
+                    </div>
+                    <div *ngIf="submitted && fee.fee_description==''" class="errors">** {{language.alert_fee_description}}</div>
+                  </div>
+                  <div class="col-sm-4">
+                      <label class=" col-form-label" for="input-normal">{{language.fee_date}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                        </div-->
+                        <input type="text" class="form-control" placeholder="{{language.alert_fee_date}}" [(ngModel)]="fee.fee_date"
+                          bsDatepicker
+                          [bsConfig]="{ isAnimated: true,dateInputFormat: 'YYYY-MM-DD',containerClass:'theme-dark-blue'}"  [ngClass]="{ 'is-invalid': (submitted && fee.fee_date=='')||(submitted&&!(isDate(fee.fee_date)))||fee.fee_date==null}">
+                      </div>
+                      <div class="errors"  *ngIf="(submitted && fee.fee_date=='')||(submitted&&!(isDate(fee.fee_date)))||fee.fee_date==null">** {{language.fee_date_error}}</div>
+
+                    </div>
+                </div>
+                <div class="form-group row">
+
+
+                  <div class="col-sm-4">
+                    <label class=" col-form-label" for="input-normal">{{language.fee_type}} : </label>
+                    <div class="input-group">
+                       <!--div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-hryvnia"></i></span>
+                      </div-->
+                      <select name="fee_type_id" class="form-control"
+                        [(ngModel)]="fee.fee_type_id" [ngClass]="{'is-invalid':submitted&&fee.fee_type_id==''}">
+                        <option value=""></option>
+                        <option *ngFor="let fee_type of fee_types" [value]="fee_type.fee_type_id" >
+                          {{fee_type.fee_type_description}}</option>
+                      </select>
+                    </div>
+                    <div class="errors" *ngIf="submitted&&fee.fee_type_id==''">
+                      ** {{language.alert_fee_type}}
+                    </div>
+                  </div>
+                  <div class="col-sm-4">
+                      <label class=" col-form-label" for="input-normal">{{language.fee_price}} : </label>
+                      <div class="input-group">
+                         <!--div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
+                        </div-->
+                        <input type="text" id="input-normal" name="fee_price" class="form-control" placeholder="{{language.alert_fee_price}}"
+                          [(ngModel)]="fee.fee_price" [ngClass]="{'is-invalid':submitted&&!isFloat(fee.fee_price)}">
+                      </div>
+                      <div class="errors" *ngIf="submitted&&!isFloat(fee.fee_price)">
+                        ** {{language.fee_price_error}}
+                      </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-sm-12">
+                    <button class="btn btn-primary save-data" style="float:right;margin-right:0px;"
+                      (click)="save()"> <i  class="far fa-save"></i>&nbsp; {{language.save_data}}</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,61 @@
+<app-header
+  [navbarBrandRouterLink]="['/dashboard']"
+  [fixed]="true"
+  [navbarBrandFull]="{src: 'data:image/gif;base64,'+municipality.icon_img, height: 30, alt: ''}"
+  [navbarBrandMinimized]="{src: 'data:image/gif;base64,'+municipality.icon_img, height: 30, alt: ''}"
+  [sidebarToggler]="'lg'"
+  [asideMenuToggler]="false" >
+  <ul class="nav navbar-nav d-md-down-none">
+
+  </ul>
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item">
+        <div class="btn-group" dropdown>
+            <button id="button-basic" dropdownToggle type="button" class="btn dropdown-toggle"
+                    aria-controls="dropdown-basic">
+                    <i class="flag-icon flag-icon-gb" title="ag" id="ag" *ngIf="lang=='EN'"></i>
+                    <i class="flag-icon flag-icon-th" title="ag" id="ag" *ngIf="lang=='TH'"></i>
+                    &nbsp; {{lang=="TH"?"ไทย":"English"}} <span class="caret"></span>
+            </button>
+            <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu"
+                role="menu" aria-labelledby="button-basic">
+              <li role="menuitem"><div class="dropdown-header text-center"><strong>language</strong></div></li>
+              <li role="menuitem"><a class="dropdown-item" (click)="changeLang('EN')"><i class="flag-icon flag-icon-gb" title="ag" id="ag"></i>English</a></li>
+              <li role="menuitem"><a class="dropdown-item"(click)="changeLang('TH')"><i class="flag-icon flag-icon-th"></i>ไทย</a></li>
+
+            </ul>
+          </div>
+    </li>
+
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+      <a class="nav-link" dropdownToggle href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <img src="assets/img/avatars/6.jpg" class="img-avatar" />
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+        <div class="dropdown-header text-center"><strong>Account</strong></div>
+        <a class="dropdown-item" ><i class="fa fa-user"></i> {{user.username}}</a>
+
+        <a class="dropdown-item" (click)="logout()"><i class="fa fa-lock"></i> {{language.want_logout}}</a>
+      </div>
+    </li>
+  </ul>
+</app-header>
+<div class="app-body">
+  <app-sidebar [fixed]="true" [display]="'lg'"  *ngIf="_reload">
+    <app-sidebar-nav [navItems]="navItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+    <app-sidebar-minimizer></app-sidebar-minimizer>
+  </app-sidebar>
+  <main class="main">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" *ngFor="let item of breadcrumbs"><a >{{item[lang]}}</a></li>
+
+        </ol>
+      </nav>
+
+      <div class="container-fluid">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+</div>
+
