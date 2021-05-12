@@ -47,7 +47,7 @@
     "angular-6-datatable": "^0.8.0",
     "bn-ng-idle": "0.0.2",
     "bootstrap": "4.0.0-beta.2",
-    "chart.js": "^2.8.0",
+    "chart.js": "^2.9.4",
     "core-js": "^2.6.9",
     "datatables.net": "^1.10.19",
     "datatables.net-bs4": "^1.10.19",
